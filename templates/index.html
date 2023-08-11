@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CHAMP</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.4"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.0/dist/vuetify.js"></script> -->
+    <script src="https://github.com/ariecattan/CoRefi/releases/download/1.5/co-refi.min.js"></script>
+    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <div class="container">
+        <br/>
+        <div class="file-upload-container" >
+            <div class="file-upload-text" disable>Click to Upload a Configuration File</div>
+            <input type="file" id="file-upload-input" class="file-upload-input" />
+            <label for="file-upload-input" class="file-upload-label">Choose File</label>
+        </div>
+
+        <div class="file-upload-container" >
+            <div class="file-upload-text">Click to Upload Multiple Annotations</div>
+            <input type="file" id="multiple-file-upload-input" class="file-upload-input" multiple />
+            <label for="multiple-file-upload-input" class="file-upload-label">Choose Files</label>
+        </div>
+
+        <!-- <form class="form-inline">
+    
+          
+    
+          <input type="file" name="file" id="fileInput" class="inputfile" />
+        </form> -->
+        <div class="co-refi" data-app>
+          <co-refi id='kuku' style="display: none;" ref="corefi"></co-refi>
+        </div>
+      </div>
+    
+
+      <div class="iaa-container">
+        <div id="table-container" style="display: none;">
+
+        </div>
+      </div>
+      
+
+</body>
+<script>
+    
+
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    }
+    function removeElement(elementId) {
+  
+      // Removes an element from the document
+      var element = document.getElementsByTagName("co-refi")[0];
+      element.vueComponent.$destroy();
+      element.remove();
+      // element.remove();
+      // element.parentNode.removeChild(element);
+    }
+  
+    function createElement(data) {
+      var x = document.getElementsByClassName("co-refi");
+      let co = document.createElement(tagName = 'co-refi');
+      co.setAttribute('json', JSON.stringify(data));
+      co.style = "display:block"
+      co.id = "kuku";
+      x[0].appendChild(co);
+    }
+  
+    function reload(data) {
+      removeElement('kuku');
+      createElement(data);
+  
+      // var container = document.getElementById("app");
+      // var content = container.innerHTML;
+      // container.innerHTML= content; 
+  
+      //this line is to watch the result in console , you can remove it later	
+      console.log("Refreshed");
+    }
+
+    document.getElementById("file-upload-input").addEventListener("change", function(event) {
+        const fileInput = event.target;
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const fileName = file.name;
+            console.log("Uploaded file label: ", fileName);
+
+            var fileread = new FileReader();
+            fileread.onload = function (e) {
+                var content = e.target.result;
+                reload(JSON.parse(content));
+            };
+            fileread.readAsText(file);
+        }
+    });
+
+    document.getElementById("multiple-file-upload-input").addEventListener("change", function(event) {
+        const fileInput = event.target;
+        if (fileInput.files.length > 0) {
+            const files = fileInput.files;
+            const fileNames = [];
+            for (let i = 0; i < files.length; i++) {
+                fileNames.push(files[i].name);
+            }
+            console.log("Uploaded multiple files labels: ", fileNames);
+
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            // Send the files to the server using fetch API
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const tableContainer = document.getElementById('table-container');
+                tableContainer.innerHTML = data.table;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
+  
+  </script>
+
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .file-upload-container {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 10px;
+        background-color: #f7f7f7;
+        width: 500px;
+        margin: 50px auto;
+    }
+
+    .file-upload-container:hover {
+        border-color: #aaa;
+    }
+
+    .file-upload-text {
+        color: #666;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .file-upload-input {
+        display: none;
+    }
+
+    .file-upload-label {
+        color: #fff;
+        background-color: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .file-upload-input, .multiple-file-upload-input {
+        pointer-events: none;
+    }
+</style>
+
+</html>
+
