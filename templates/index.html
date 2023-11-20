@@ -10,7 +10,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.4"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.0/dist/vuetify.js"></script> -->
-    <script src="https://github.com/ariecattan/CoRefi/releases/download/1.5/co-refi.min.js"></script>
+
+    <script src="https://github.com/ariecattan/champ/releases/download/v1.0.0/champ-app.min.js"></script>
     
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -45,8 +46,8 @@
     
           <input type="file" name="file" id="fileInput" class="inputfile" />
         </form> -->
-        <div class="co-refi" data-app>
-          <co-refi id='kuku' style="display: none;" ref="corefi"></co-refi>
+        <div class="champ-app" data-app>
+          <champ-app id='kuku' style="display: none;" ref="corefi"></champ-app>
         </div>
       </div>
     
@@ -72,7 +73,7 @@
     function removeElement(elementId) {
   
       // Removes an element from the document
-      var element = document.getElementsByTagName("co-refi")[0];
+      var element = document.getElementsByTagName("champ-app")[0];
       element.vueComponent.$destroy();
       element.remove();
       // element.remove();
@@ -80,8 +81,8 @@
     }
   
     function createElement(data) {
-      var x = document.getElementsByClassName("co-refi");
-      let co = document.createElement(tagName = 'co-refi');
+      var x = document.getElementsByClassName("champ-app");
+      let co = document.createElement(tagName = 'champ-app');
       co.setAttribute('json', JSON.stringify(data));
       co.style = "display:block"
       co.id = "kuku";
