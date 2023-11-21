@@ -47,7 +47,7 @@
           <input type="file" name="file" id="fileInput" class="inputfile" />
         </form> -->
         <div class="champ-app" data-app>
-          <champ-app id='kuku' style="display: none;" ref="corefi"></champ-app>
+          <champ-app id='champ' style="display: none;" ref="corefi"></champ-app>
         </div>
       </div>
     
@@ -81,18 +81,17 @@
     }
   
     function createElement(data) {
+      document.getElementById("table-container").style.display="none";
       var x = document.getElementsByClassName("champ-app");
       let co = document.createElement(tagName = 'champ-app');
       co.setAttribute('json', JSON.stringify(data));
       co.style = "display:block"
-      co.id = "kuku";
+      co.id = "champ";
       x[0].appendChild(co);
-
-      document.getElementById("table-container").style.display="block"
     }
   
     function reload(data) {
-      removeElement('kuku');
+      removeElement('champ');
       createElement(data);
   
       // var container = document.getElementById("app");
@@ -121,6 +120,7 @@
     });
 
     document.getElementById("multiple-file-upload-input").addEventListener("change", function(event) {
+        document.getElementById("champ").style.display="none";
         const fileInput = event.target;
         if (fileInput.files.length > 0) {
             const files = fileInput.files;
@@ -148,7 +148,7 @@
             })
             .catch(error => console.error('Error:', error));
         }
-        document.getElementById("table-container").style.display="block"
+        document.getElementById("table-container").style.display="block";
     });
   
   </script>
