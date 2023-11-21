@@ -87,6 +87,8 @@
       co.style = "display:block"
       co.id = "kuku";
       x[0].appendChild(co);
+
+      document.getElementById("table-container").style.display="block"
     }
   
     function reload(data) {
@@ -102,6 +104,7 @@
     }
 
     document.getElementById("file-upload-input").addEventListener("change", function(event) {
+        document.getElementById("champ-app").style.display="block"
         const fileInput = event.target;
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
@@ -145,6 +148,7 @@
             })
             .catch(error => console.error('Error:', error));
         }
+        document.getElementById("table-container").style.display="block"
     });
   
   </script>
