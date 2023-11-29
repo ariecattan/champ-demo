@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.4"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.0/dist/vuetify.js"></script> -->
 
-    <script src="https://github.com/ariecattan/champ/releases/download/v1.0.0/champ-app.min.js"></script>
+    <script src="https://github.com/ariecattan/champ/releases/download/v1.0.1/champ-app.min.js"></script>
     
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -103,7 +103,6 @@
     }
 
     document.getElementById("file-upload-input").addEventListener("change", function(event) {
-        document.getElementById("champ-app").style.display="block"
         const fileInput = event.target;
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
