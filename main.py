@@ -75,13 +75,13 @@ def evaluate_topic(gold_topic, sys_topic):
         tn += 1
 
 
-    precision = tp / (tp + fp)
-    recall = tp / (tp + fn)
+    precision = tp / (tp + fp) if (tp + fp) != 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) != 0 else 0
 
     return {
       "precision": precision,
       "recall": recall,
-      "f1": 2 * precision * recall / (precision + recall)
+      "f1": 2 * precision * recall / (precision + recall) if precision + recall != 0 else 0
     }
 
 
@@ -131,7 +131,9 @@ def upload_files():
 
     df = process_inputs(uploaded_files)
 
-    all_possible_pairs = [f'{a}-{b}' for a, b in combinations(df["name"], r=2) if a != b]
+    all_possible_pairs = [f'{a}-{b}' for a, b in combinations(df["name"].unique(), r=2) if a != b]
+    
+    print(all_possible_pairs)
     topics = df["id"].unique()
 
     # init iaa matrix
@@ -142,7 +144,7 @@ def upload_files():
 
     # compute iaa for each topic separately
     for topic_id, topic_annotation in df.groupby("id"):
-       topic_pairs = [f'{a}-{b}' for a, b in combinations(topic_annotation["name"], r=2)]
+       topic_pairs = [f'{a}-{b}' if f'{a}-{b}' in all_possible_pairs else f'{b}-{a}' for a, b in combinations(topic_annotation["name"], r=2)]
        topic_annotation = topic_annotation.set_index("name")
        for pair in topic_pairs:
           a, b = pair.split("-")
