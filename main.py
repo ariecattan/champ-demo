@@ -132,8 +132,6 @@ def upload_files():
     df = process_inputs(uploaded_files)
 
     all_possible_pairs = [f'{a}-{b}' for a, b in combinations(df["name"].unique(), r=2) if a != b]
-    
-    print(all_possible_pairs)
     topics = df["id"].unique()
 
     # init iaa matrix
